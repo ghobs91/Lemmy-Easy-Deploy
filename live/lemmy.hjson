@@ -1,0 +1,27 @@
+{
+  setup: {
+    admin_username: "lemmy"
+    admin_password: "czHnDczEU9go9P33khcGPgkC7s9gMjJD"
+    site_name: "Lemmy"
+  }
+
+  hostname: "lemmy.onrender.com"
+  bind: "0.0.0.0"
+  port: 8536
+  tls_enabled: true
+
+  pictrs: {
+    url: "http://pictrs:8080/"
+    api_key: "LLSe42XI09HGiKcMsMTDU94xWZjMOvLk"
+  }
+
+  database: {
+    user: "lemmy"
+    password: "Ccq7LCzaFBaJagmf3EM9GUiMZLbdpH8m"
+    host: "postgres"
+    port: 5432
+    database: "lemmy"
+    pool_size: 5
+  }
+
+}

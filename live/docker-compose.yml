@@ -1,0 +1,80 @@
+version: "3.9"
+x-logging:
+  &default-logging
+  options:
+    max-size: '500m'
+  driver: json-file
+
+services:
+
+  proxy:
+    image: caddy:latest
+    env_file:
+      - ./caddy.env
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - pictrs
+      - lemmy-ui
+    restart: always
+    logging: *default-logging
+
+  lemmy:
+    image: ghcr.io/ubergeek77/lemmy:0.18.4
+    volumes:
+      - ./lemmy.hjson:/config/config.hjson
+    depends_on:
+      - postgres
+      - pictrs
+    restart: always
+    logging: *default-logging
+
+  lemmy-ui:
+    image: ghcr.io/ubergeek77/lemmy-ui:0.18.4
+    environment:
+      - LEMMY_UI_LEMMY_INTERNAL_HOST=lemmy:8536
+      - LEMMY_UI_LEMMY_EXTERNAL_HOST=localhost:1236
+    depends_on:
+      - lemmy
+    restart: always
+    logging: *default-logging
+
+  pictrs:
+    image: asonix/pictrs:0.4.0
+    user: 991:991
+    environment:
+      - PICTRS__MEDIA__VIDEO_CODEC=vp9
+      - PICTRS__MEDIA__GIF__MAX_WIDTH=256
+      - PICTRS__MEDIA__GIF__MAX_HEIGHT=256
+      - PICTRS__MEDIA__GIF__MAX_AREA=65536
+      - PICTRS__MEDIA__GIF__MAX_FRAME_COUNT=400
+    env_file:
+      - ./pictrs.env
+    volumes:
+      - pictrs_data:/mnt
+    restart: always
+    logging: *default-logging
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=lemmy
+      - POSTGRES_DB=lemmy
+    env_file:
+      - ./postgres.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    logging: *default-logging
+
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pictrs_data:
+  postgres_data:
