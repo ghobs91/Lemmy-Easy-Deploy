@@ -17,7 +17,7 @@ services:
       - caddy_config:/config
     ports:
       - 80:80
-      - 443:443
+      - 444:444
     depends_on:
       - pictrs
       - lemmy-ui

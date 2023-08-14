@@ -108,7 +108,7 @@ load_env() {
 	SETUP_ADMIN_USER="${SETUP_ADMIN_USER:-lemmy}"
 	CADDY_DISABLE_TLS="${CADDY_DISABLE_TLS:-false}"
 	CADDY_HTTP_PORT="${CADDY_HTTP_PORT:-80}"
-	CADDY_HTTPS_PORT="${CADDY_HTTPS_PORT:-443}"
+	CADDY_HTTPS_PORT="${CADDY_HTTPS_PORT:-444}"
 	LEMMY_TLS_ENABLED="${LEMMY_TLS_ENABLED:-true}"
 	ENABLE_EMAIL="${ENABLE_EMAIL:-false}"
 	SMTP_SERVER="${SMTP_SERVER:-postfix}"
@@ -653,7 +653,7 @@ install_custom_env() {
 		(
 			source ./custom/customLemmy.env
 			if [[ -z "${LEMMY_CORS_ORIGIN}" ]]; then
-				if [[ "${CADDY_HTTP_PORT}" != "80" ]] || [[ "${CADDY_HTTPS_PORT}" != "443" ]]; then
+				if [[ "${CADDY_HTTP_PORT}" != "80" ]] || [[ "${CADDY_HTTPS_PORT}" != "444" ]]; then
 					echo ""
 					echo "----------------------------------------------------------------------------------------------------"
 					echo "WARNING: You have changed one or more ports used by Caddy, but have not specified LEMMY_CORS_ORIGIN"
